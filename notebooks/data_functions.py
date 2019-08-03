@@ -34,19 +34,21 @@ def separate_simulated_data(data):
 
 def label_simulated_data(energies):
     """Given arrays of energies, produces a set of labels for the dataset 
-    for use in classification where 
-    0 -> single event
-    1 -> double event 
+    for use in classification with
+    [1, 0] -> single event
+    [0, 1] -> double event 
     The labels are determined from the energy values, as we know that if 
     there is no second particle then Energy2 = 0."""
     
     n_samples = energies.shape[0]
+    n_classes = energies.shape[1]
 
-    
-    # returns a 1D array where if the condition is true the value is 1
+    labels = np.zeros((n_samples, n_classes)) 
+    # returns an n_samples x n_classes array where if the condition is true the value is 1
     # and if the condition is false the value is 0, corresponding to
     # double and single events, respectively.
     # np.where(condition, return if true, return if false)
-    labels = np.where(energies[:,1] != 0, 1, 0)
+    labels[:,0] = np.where(energies[:,1] != 0, 0, 1)
+    labels[:,1] = np.where(energies[:,1] != 0, 1, 0)
             
     return labels
